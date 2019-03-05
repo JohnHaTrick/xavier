@@ -15,7 +15,7 @@ g      = 9.81;                      % [m/s2] gravity
 Fy_max = mu*m*g/1000;               % [kN] max lateral force
 
 % discretization
-dt    = 0.05;                       % [sec] time step
+dt    = 0.1;                        % [sec] time step
 T     = 4;                          % [sec] simulate until T
 t     = 0:dt:2*T-dt;                % time array
 N     = length(t)/2;                % num steps in simulation
