@@ -1,11 +1,12 @@
-function [ x_opt, u_opt, cost ] = calc_u_MPC(x0, x_min, k_obs, N_PH)
+function [ x, u, cost ] = ...
+    calc_RMPC(x0, x_min, k_obs, N_PH)
 
 % cost weights
 R = 1;                          % input
 % lamda = 1000;                 % slack cost
 
 %% solve convex problem 
-cvx_begin quiet
+cvx_begin
     variable x(N_PH,   1)       % states
     variable u(N_PH-1, 1)       % inputs
 %     variable slack
@@ -24,9 +25,7 @@ cvx_begin quiet
 cvx_end
 
 %% parse results
-x_opt    = x;
-u_opt    = u;
 cost.sum = cvx_optval;
-cost.u_n = sum(u .* u) * R;
+cost.u   = sum(u .* u) * R;
 
 end
