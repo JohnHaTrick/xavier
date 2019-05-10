@@ -1,9 +1,10 @@
 function [ x_n, u_n, x_c, u_c, cost ] = ...
-    calc_CMPC(x0, x_min, k_obs, N_PH)
+    calc_CMPC(x0, x_min, k_obs, N_PH, P)
 
 % cost weights
-R_n = 1;                                        % input weight
-R_c = 1/1000;
+R   = 1;                                        % input weight
+R_n = R * (1-P) + 1/1000;                       % cvx combination,
+R_c = R * P     + 1/1000;                       %    according to P
 % lamda = 1000;                                 % slack cost
 
 %% solve convex problem 
