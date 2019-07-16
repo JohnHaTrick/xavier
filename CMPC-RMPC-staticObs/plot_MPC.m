@@ -74,11 +74,12 @@ function plot_MPC(opt_r,cost_r,opt_50,cost_50,opt_25,cost_25,opt_c,cost_c,t_obs,
         cumcost_r = cumsum([cost_r.sum]);
         bar(t_r,[cost_r.u],'stacked','EdgeColor','none')
         plot_data(plot_idx) = plot([t_r(curI),t_r(curI)],[0,max(cumcost_r)],'Color',.5*[1 1 1]);
+        set(get(get(plot_data(plot_idx),'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
             plot_idx = plot_idx + 1;
         plot(t_r, cumcost_r, 'Color', c_nom)
         xlabel('time'); %ylabel('')
         xlim([0,maxT]); ylim([0 1.5]);
-        legend('cum','input cost')
+        legend('stage cost','cumulative cost')
         
 
     %% pure contingency
@@ -114,13 +115,14 @@ function plot_MPC(opt_r,cost_r,opt_50,cost_50,opt_25,cost_25,opt_c,cost_c,t_obs,
         xlim([0,maxT]); ylim([-0.5 1.5]);
     subplot(3,3,8); hold on;                        % contingency costs
         cumcost_c = cumsum([cost_c.sum]);
-        bar(t_c,[[cost_c.u_n]',[cost_c.u_c]'],'stacked','EdgeColor','none')
-        plot_data(plot_idx) = plot([t_c(curI),t_c(curI)],[0,max(cumcost_c)],'Color',.5*[1 1 1]);
-            plot_idx = plot_idx + 1;
+        bar(t_c,[cost_c.u_n]','stacked','EdgeColor','none')
         plot(t_c, cumcost_c, 'Color', c_cont)
+        plot_data(plot_idx) = plot([t_c(curI),t_c(curI)],[0,max(cumcost_c)],'Color',.5*[1 1 1]);
+        set(get(get(plot_data(plot_idx),'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+            plot_idx = plot_idx + 1;
         xlabel('time'); %ylabel('')                 %   customize
         xlim([0,maxT]); ylim([0 1.5]);
-        legend('cum','u_n cost','u_c cost')
+        legend('stage cost','cumulative cost')
     
     %% mixed results
     subplot(3,3,3); hold on;                        % mixed states

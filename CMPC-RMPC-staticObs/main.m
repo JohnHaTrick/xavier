@@ -11,6 +11,7 @@ clc;
 x0    = 0;                                      % initial state
 t0    = 0;                                      %   and time
 x_min = 1;                                      % min x to escape obstacle
+buff  = 0.05;                                   % add to x_min for visual separation
 t_obs = 6;                                      % obstacle pops at this time
 % u_max = 1;                                      % max input command
 dt   = 1;                                       % discretization time step
@@ -63,24 +64,23 @@ for i = 1:N_t
     opt_c(i).t  = opt_r(i).t;
     
     [opt_r(i).x, opt_r(i).u, cost_r(i)] = ...   % call RMPC
-        calc_RMPC(x0_r, x_min, k_obs, N_PH);
+        calc_RMPC(x0_r, x_min+buff, k_obs, N_PH);
     
     [opt_50(i).x_n, opt_50(i).u_n, ...          % call 50% CMPC
         opt_50(i).x_c, opt_50(i).u_c, ...
         cost_50(i)] = ...
-        calc_CMPC(x0_50, x_min, k_obs, N_PH, P(1));
+        calc_CMPC(x0_50, x_min+buff, k_obs, N_PH, P(1));
     
     [opt_25(i).x_n, opt_25(i).u_n, ...          % call 25% CMPC
         opt_25(i).x_c, opt_25(i).u_c, ...
         cost_25(i)] = ...
-        calc_CMPC(x0_25, x_min, k_obs, N_PH, P(2));
+        calc_CMPC(x0_25, x_min+buff, k_obs, N_PH, P(2));
     
     [opt_c(i).x_n, opt_c(i).u_n, ...            % call CMPC
         opt_c(i).x_c, opt_c(i).u_c, ...
         cost_c(i)] = ...
-        calc_CMPC(x0_c, x_min, k_obs, N_PH, P(3));
+        calc_CMPC(x0_c, x_min+buff, k_obs, N_PH, P(3));
     
-
     t0    = t0 + dt;
     x0_r  = opt_r(i).x(2);                       % set next robust x0
     x0_50 = opt_50(i).x_n(2);                    %   & 50% contingency x0
