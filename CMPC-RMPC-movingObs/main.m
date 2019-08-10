@@ -13,11 +13,11 @@ y0    = 0;                                      %   x, y, & time
 t0    = 0;
 v_y   = 1;                                      % speed in y dir. (const)(y=t)
 dt    = 1;                                      % time step discretization
-T     = 13;                                      % total Time in sim
+T     = 13;                                     % total Time in sim
 N_t   = T/dt;                                   % num time steps in sim
-x_min = 2; buff  = 0.1;                         % min x to escape obstacle, and visual buffer
-y_obs = 10; v_obs = x_min/8;                     % obs may pop at this y and speed
-N_PH  = 10;                                      % num steps in pred. horizon
+x_min = 1; buff  = 0.1;                         % min x to escape obstacle, and visual buffer
+y_obs = 10; v_obs = (x_min+1)/6;                % obs may pop at this y and speed
+N_PH  = 10;                                     % num steps in pred. horizon
 P     = [0.5 0.25 0.0];                         % obstacle probabilities
 
 %% preallocate MPC arrays
@@ -60,7 +60,7 @@ for i = 1:N_t
     disp(['iteration ',num2str(i),' of ',num2str(N_t)])
     
     k_obs   = y_obs - y0 + 1;                   % Set obs stage in MPC
-    x_min_k = min(v_obs*max(y_obs-y0,0), ...    % how far can obs reach
+    x_min_k = min(v_obs*max(y_obs-y0,0)-1, ...  % how far can obs reach
                   x_min)     + buff;            %   by time we get there?
     opt_A(i).x_min = x_min_k - buff;
 
